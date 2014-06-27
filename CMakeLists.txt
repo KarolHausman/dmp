@@ -107,7 +107,7 @@ include_directories(
 
 ## Declare a cpp library
 add_library(dmp
-  src/dmp.cpp src/fourier_approx.cpp src/radial_approx.cpp
+  src/dmp.cpp src/fourier_approx.cpp src/radial_approx.cpp src/linear_approx.cpp
 )
 
 ## Declare a cpp executable
