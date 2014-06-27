@@ -90,6 +90,8 @@ void learnFromDemo(const DMPTraj &demo,
 	double *f_targets = new double[n_pts];
 	FunctionApprox *f_approx = new FourierApprox(num_bases);
 
+  
+  ROS_INFO("weights calculation...");  
 	//Compute the DMP weights for each DOF separately
 	for(int d=0; d<dims; d++){
 		double curr_k = k_gains[d];
@@ -100,6 +102,7 @@ void learnFromDemo(const DMPTraj &demo,
 		v_demo[0] = 0;
 		v_dot_demo[0] = 0;
 
+      ROS_INFO("v and v dot calculation...");
 		//Calculate the demonstration v and v dot by assuming constant acceleration over a time period
 		for(int i=1; i<n_pts; i++){
 			x_demo[i] = demo.points[i].positions[d];
@@ -109,6 +112,7 @@ void learnFromDemo(const DMPTraj &demo,
 			v_dot_demo[i] = (v_demo[i] - v_demo[i-1]) / dt;
 		}
 
+  ROS_INFO("target pairs calculation...");
 		//Calculate the target pairs so we can solve for the weights
 		for(int i=0; i<n_pts; i++){
 			double phase = calcPhase(demo.times[i],tau);
@@ -117,6 +121,8 @@ void learnFromDemo(const DMPTraj &demo,
 			f_targets[i] /= phase; // Do this instead of having fxn approx scale its output based on phase
 		}
 
+
+  ROS_INFO("solve for weights...");
 		//Solve for weights
 		f_approx->leastSquaresWeights(f_domain, f_targets, n_pts);
 
